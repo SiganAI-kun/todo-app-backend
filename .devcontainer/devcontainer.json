@@ -1,0 +1,34 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Go-Backend-MySQL-Database",
+  // "dockerFile": "./Dockerfile",
+  "service": "backend",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "workspaceFolder": "/workspaces",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "go.toolsManagement.checkForUpdates": "off",
+        "go.gopath": "/go",
+        "go.gocodeAutoBuild": true,
+        "go.formatTool": "gofmt",
+        "go.useLanguageServer": true,
+        "editor.formatOnSave": false,
+        "[go]": {
+          "editor.formatOnSave": true
+        }
+      },
+      "extensions": [
+        "ms-vscode.go",
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "oderwat.indent-rainbow",
+        "MS-CEINTL.vscode-language-pack-ja",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  // "postCreateCommand": "git config --local core.hooksPath .githook; chmod -R +x .githooks/;",
+  "remoteUser": "vscode"
+}

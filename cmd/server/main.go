@@ -1,32 +1,45 @@
 package main
 
 import (
-	"todo-app-backend/internal/handler"
+	"todo-app-backend/api"
+	"todo-app-backend/cmd"
+	database "todo-app-backend/db"
+	myMiddleware "todo-app-backend/middleware"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
+var DB *database.DbContext
+
 func main() {
-  // インスタンスを作成
-  e := echo.New()
+	env := cmd.GetEnvironmentVariables()
+	DB = database.NewDatabase(env.Dsn)
+	// インスタンスを作成
+	e := echo.New()
 
-  // ミドルウェアを設定
-  e.Use(middleware.Logger())
-  e.Use(middleware.Recover())
+	// if os.Getenv("APP_ENV") != "local" {
+	// 	ecs.Init()
+	// 	e.Use(echo.WrapMiddleware(func(h http.Handler) http.Handler {
+	// 		return xray.Handler(xray.NewFixedSegmentNamer("todoapp-api"), h)
+	// 	}))
+	// }
 
-  // ルートを設定
-  e.GET("/", handler.Hello)
-	e.GET("/todos", handler.Get_tasks)
-	e.POST("/todos", handler.Create_tasks)
-	e.PUT("/todos", handler.Update_tasks)
-	e.DELETE("/todos", handler.Delete_tasks)
+	// ミドルウェアを設定
+	e.Use(middleware.CORS())
+	// e.Use(middleware.JWTWithConfig())
+	e.Use(myMiddleware.SetProfile(DB))
+	e.Use(myMiddleware.Database(DB))
+	e.Use(myMiddleware.SetHTTPErrorHandler())
+	e.Validator = myMiddleware.NewCustomValidator()
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-  e.Logger.Fatal(e.Start(":5001"))
+	api.Routing(e)
+	e.Logger.Fatal(e.Start(":5000"))
 }
 
 // func main() {
 // 	http.HandleFunc("/", handler.RestHandler)
 // 	http.ListenAndServe(":5001", nil)
 // }
-

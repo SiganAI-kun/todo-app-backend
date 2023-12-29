@@ -4,6 +4,7 @@ services:
   db:
     platform: linux/x86_64
     image: mysql:latest
+    hostname: mysql-container
     ports:
       - 3307:3306
     environment:
@@ -26,4 +27,9 @@ services:
     command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
       APP_ENV: local
-      APP_DB_DNS: todos:password@(host.docker.internal:3307)/todos
+      APP_DB_DNS: todo_app:password@tcp(db)/todo_app
+      # APP_DB_DNS: todo_app:password@tcp(localhost:3307)/todo_app
+      # APP_DB_DNS: todo_app:password@(host.docker.internal:3307)/todo_app
+
+volumes:
+  db-todo:

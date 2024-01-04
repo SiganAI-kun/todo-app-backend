@@ -90,11 +90,12 @@ func (q TaskDataQuery) CheckSameTasksDataQuery(param CreateTaskDataParam) (bool,
 		},
 	).Find(&data).Error
 
-// エラーが nil かつデータが見つかった場合
-if err == nil && data.TaskId != 0 {
-	// データが見つかった場合の処理
-	return true, nil
-}
+	// エラーが nil かつデータが見つかった場合
+	if err == nil && data.TaskId != 0 {
+		// データが見つかった場合の処理
+		return true, nil
+	}
 
-// データが見つからなかった場合の処理
-return false, nil}
+	// データが見つからなかった場合の処理
+	return false, nil
+}

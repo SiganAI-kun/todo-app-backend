@@ -6,3 +6,9 @@ type GetTaskDataParam struct {
 	End         string `json:"end"`
 	SearchQuery string `json:"searchQuery"`
 }
+
+type CreateTaskDataParam struct {
+	TaskName     string `json:"taskName"`
+	TaskDeadline string `json:"taskDeadline"`
+	TaskDetails  string `json:"taskDetails"`
+}

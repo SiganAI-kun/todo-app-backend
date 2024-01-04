@@ -35,7 +35,7 @@ func (s GetPreviewTaskDataService) Exec(param GetTaskDataParam) (interface{}, er
 		return nil, err
 	}
 
-	data, err := s.query.DataQuery(*p)
+	data, err := s.query.GetDataQuery(*p)
 
 	if err != nil {
 		return nil, err

@@ -6,8 +6,7 @@ import (
 )
 
 type ITaskDataQuery interface {
-	DataQuery(TaskDataParam) (*TaskDataResponse, error)
-	// DataQuery(TaskDataParam) (interface{}, error)
+	DataQuery(TaskDataParam) ([]TaskDataResponse, error)
 }
 
 type TaskDataQuery struct {

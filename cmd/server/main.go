@@ -32,7 +32,9 @@ func main() {
 	e.Use(myMiddleware.Database(DB))
 	e.Use(myMiddleware.SetHTTPErrorHandler())
 	e.Validator = myMiddleware.NewCustomValidator()
-	e.Use(middleware.Logger())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "time=${time_rfc3339}, method=${method}, uri=${uri}, status=${status}\n",
+	}))
 	e.Use(middleware.Recover())
 
 	api.Routing(e)

@@ -44,14 +44,14 @@ func NewDatabase(dsn string) *DbContext {
 func Current(ctx context.Context) *DbContext {
 	value := ctx.Value("DB")
 	if value == nil {
-			fmt.Println("DB value is nil")
-			return nil
+		fmt.Println("DB value is nil")
+		return nil
 	}
 
 	dbContext, ok := value.(*DbContext)
 	if !ok {
-			fmt.Println("DB value is not of type *DbContext")
-			return nil
+		fmt.Println("DB value is not of type *DbContext")
+		return nil
 	}
 
 	return dbContext

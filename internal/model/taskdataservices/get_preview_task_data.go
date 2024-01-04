@@ -1,7 +1,6 @@
 package taskdataservices
 
 import (
-	"fmt"
 	database "todo-app-backend/db"
 	"todo-app-backend/internal/model"
 	"todo-app-backend/internal/repository/taskdataqueries"
@@ -26,7 +25,6 @@ func NewGetPreviewDataService(dbContext *database.DbContext, q taskdataqueries.I
 }
 
 func (s GetPreviewTaskDataService) Exec(param GetTaskDataParam) (interface{}, error) {
-	fmt.Println(param)
 	p, err := taskdataqueries.NewGetTaskDataParam(
 		param.Start,
 		param.End,
@@ -36,7 +34,6 @@ func (s GetPreviewTaskDataService) Exec(param GetTaskDataParam) (interface{}, er
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(p)
 
 	data, err := s.query.DataQuery(*p)
 

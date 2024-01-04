@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"todo-app-backend/internal/model/taskdataservices"
@@ -16,7 +15,7 @@ type TodoController struct {
 
 func NewTodoController(e *echo.Echo) *TodoController {
 	tc := &TodoController{
-		echo: e,
+		echo:           e,
 		serviceFactory: taskdataservices.NewTaskDataServiceFactory(),
 	}
 
@@ -33,7 +32,6 @@ func (tc TodoController) Handle() {
 // ハンドラーを定義
 func (tc TodoController) Get_tasks(c echo.Context) error {
 	param := new(taskdataservices.GetTaskDataParam)
-	fmt.Println(param.IsFilterd)
 	err := c.Bind(param)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
@@ -43,19 +41,16 @@ func (tc TodoController) Get_tasks(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	fmt.Println("ttt")
-
 	svc := tc.serviceFactory.CreateGetTaskDataService(c)
 	if svc == nil {
 		log.Println("Error: GetTaskDataService is nil")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create GetTaskDataService"})
 	}
-	fmt.Println("check1")
+
 	data, err := svc.Exec(*param)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	// return c.JSON(http.StatusOK, "Get_tasks")
 	return c.JSON(http.StatusOK, &data)
 }
 

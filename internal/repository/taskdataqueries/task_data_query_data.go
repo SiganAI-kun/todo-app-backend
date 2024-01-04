@@ -3,8 +3,9 @@ package taskdataqueries
 type QueryAggParam struct {
 }
 
-func (q TaskDataQuery) DataQuery(param TaskDataParam) (*TaskDataResponse, error) {
-	var data TaskDataResponse
+// すべてのタスクデータの取得
+func (q TaskDataQuery) DataQuery(param TaskDataParam) ([]TaskDataResponse, error) {
+	var data []TaskDataResponse
 
 	query := `
 		SELECT
@@ -15,6 +16,7 @@ func (q TaskDataQuery) DataQuery(param TaskDataParam) (*TaskDataResponse, error)
 		FROM
 			tasks t
 	`
+
 	err := q.base.DbClient.Session().Debug().Raw(
 		query,
 	).Find(&data).Error
@@ -23,5 +25,5 @@ func (q TaskDataQuery) DataQuery(param TaskDataParam) (*TaskDataResponse, error)
 		return nil, err
 	}
 
-	return &data, nil
+	return data, nil
 }

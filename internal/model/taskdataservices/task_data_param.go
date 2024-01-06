@@ -12,3 +12,10 @@ type CreateTaskDataParam struct {
 	TaskDeadline string `json:"taskDeadline"`
 	TaskDetails  string `json:"taskDetails"`
 }
+
+type UpdateTaskDataParam struct {
+	TaskId       int    `json:"taskId"`
+	TaskName     string `json:"taskName"`
+	TaskDeadline string `json:"taskDeadline"`
+	TaskDetails  string `json:"taskDetails"`
+}

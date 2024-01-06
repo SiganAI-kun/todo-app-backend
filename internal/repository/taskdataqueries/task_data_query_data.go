@@ -63,6 +63,37 @@ func (q TaskDataQuery) CreateDataQuery(param CreateTaskDataParam) (error, error)
 	return nil, nil
 }
 
+func (q TaskDataQuery) UpdateDataQuery(param UpdateTaskDataParam) (error, error) {
+	query := `
+	UPDATE tasks
+	SET 
+		task_name = @task_name,
+		task_deadline = @task_deadline,
+		task_details = @task_details,
+		updated_at = NOW()
+	WHERE 1  =1
+		AND task_id = @task_id;
+	`
+
+	result := q.base.DbClient.Session().Debug().Exec(
+		query,
+		map[string]interface{}{
+			"task_id":       param.TaskId,
+			"task_name":     param.TaskName,
+			"task_deadline": param.TaskDeadline,
+			"task_details":  param.TaskDetails,
+		},
+	)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// 何らかの成功時の処理（ここでは新規追加されたデータの ID などが必要な場合に処理を追加）
+
+	return nil, nil
+}
+
 func (q TaskDataQuery) CheckSameTasksDataQuery(param CreateTaskDataParam) (bool, error) {
 	var data TaskDataResponse
 	query := `

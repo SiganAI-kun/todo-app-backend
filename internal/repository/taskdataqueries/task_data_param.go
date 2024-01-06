@@ -12,6 +12,13 @@ type CreateTaskDataParam struct {
 	TaskDetails  string
 }
 
+type UpdateTaskDataParam struct {
+	TaskId       int
+	TaskName     string
+	TaskDeadline string
+	TaskDetails  string
+}
+
 func NewGetTaskDataParam(
 	start string,
 	end string,
@@ -32,6 +39,22 @@ func NewCreateTaskDataParam(
 	taskDetails string,
 ) (*CreateTaskDataParam, error) {
 	p := &CreateTaskDataParam{
+		TaskName:     taskName,
+		TaskDeadline: taskDeadline,
+		TaskDetails:  taskDetails,
+	}
+
+	return p, nil
+}
+
+func NewUpdateTaskDataParam(
+	taskId int,
+	taskName string,
+	taskDeadline string,
+	taskDetails string,
+) (*UpdateTaskDataParam, error) {
+	p := &UpdateTaskDataParam{
+		TaskId:       taskId,
 		TaskName:     taskName,
 		TaskDeadline: taskDeadline,
 		TaskDetails:  taskDetails,

@@ -90,7 +90,39 @@ func (tc TodoController) Create_tasks(c echo.Context) error {
 }
 
 func (tc TodoController) Update_tasks(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Update_tasks")
+	param := new(taskdataservices.UpdateTaskDataParam)
+	err := c.Bind(param)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	if err = c.Validate(param); err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	// mid := tc.serviceFactory.CreateMiddlewareTaskDataService(c)
+	// if mid == nil {
+	// 	log.Println("Error: MiddlewareTaskDataService is nil")
+	// 	return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create MiddlewareTaskDataService"})
+	// }
+
+	// check, _ := mid.CheckSameTasks(*param)
+	// if check {
+	// 	return c.JSON(http.StatusOK, "TASKS0001")
+	// }
+
+	svc := tc.serviceFactory.CreateUpdateTaskDataService(c)
+	if svc == nil {
+		log.Println("Error: UpdateTaskDataService is nil")
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create UpdateTaskDataService"})
+	}
+
+	res, err := svc.Exec(*param)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+	return c.JSON(http.StatusOK, &res)
+
+	// return c.JSON(http.StatusOK, "Update_tasks")
 }
 
 func (tc TodoController) Delete_tasks(c echo.Context) error {

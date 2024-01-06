@@ -8,6 +8,7 @@ import (
 type ITaskDataQuery interface {
 	GetDataQuery(GetTaskDataParam) ([]TaskDataResponse, error)
 	CreateDataQuery(CreateTaskDataParam) (error, error)
+	UpdateDataQuery(UpdateTaskDataParam) (error, error)
 	CheckSameTasksDataQuery(CreateTaskDataParam) (bool, error)
 }
 
@@ -25,6 +26,15 @@ func NewGetTaskDataQuery(dbContext *database.DbContext) ITaskDataQuery {
 }
 
 func NewCreateTaskDataQuery(dbContext *database.DbContext) ITaskDataQuery {
+	base := repository.NewBaseQueryServices(dbContext)
+	q := &TaskDataQuery{
+		base: base,
+	}
+
+	return *q
+}
+
+func NewUpdateTaskDataQuery(dbContext *database.DbContext) ITaskDataQuery {
 	base := repository.NewBaseQueryServices(dbContext)
 	q := &TaskDataQuery{
 		base: base,

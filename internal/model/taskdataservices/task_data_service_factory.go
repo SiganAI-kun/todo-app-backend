@@ -10,6 +10,7 @@ import (
 type ITaskDataServiceFactory interface {
 	CreateGetTaskDataService(c echo.Context) IGetPreviewDataService
 	CreateCreateTaskDataService(c echo.Context) ICreatePreviewDataService
+	CreateUpdateTaskDataService(c echo.Context) IUpdatePreviewDataService
 	CreateMiddlewareTaskDataService(c echo.Context) ITaskDataMiddlewareService
 }
 
@@ -41,6 +42,18 @@ func (f *TaskDataServiceFactory) CreateCreateTaskDataService(c echo.Context) ICr
 	// }
 	q := taskdataqueries.NewCreateTaskDataQuery(dbContext)
 	svc := NewCreatePreviewDataService(dbContext, q)
+	return svc
+}
+
+func (f *TaskDataServiceFactory) CreateUpdateTaskDataService(c echo.Context) IUpdatePreviewDataService {
+	dbContext := database.Current(c.Request().Context())
+	// if dbContext == nil {
+	//   fmt.Println("Error getting database context")
+	//   // あるいはエラーハンドリングを適切に行う
+	//   return nil
+	// }
+	q := taskdataqueries.NewUpdateTaskDataQuery(dbContext)
+	svc := NewUpdatePreviewDataService(dbContext, q)
 	return svc
 }
 

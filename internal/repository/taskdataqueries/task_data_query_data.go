@@ -130,3 +130,36 @@ func (q TaskDataQuery) CheckSameTasksDataQuery(param CreateTaskDataParam) (bool,
 	// データが見つからなかった場合の処理
 	return false, nil
 }
+
+func (q TaskDataQuery) CheckTaskExistDataQuery(param UpdateTaskDataParam) (bool, error) {
+	var data TaskDataResponse
+	query := `
+		SELECT
+			t.task_id
+			, t.task_name
+			, t.task_deadline
+			, t.task_details
+		FROM
+			tasks t
+		WHERE 1 = 1
+			AND t.task_id = @task_id
+		LIMIT
+			1
+	`
+
+	err := q.base.DbClient.Session().Debug().Raw(
+		query,
+		map[string]interface{}{
+			"task_id": param.TaskId,
+		},
+	).Find(&data).Error
+
+	// エラーが nil かつデータが見つかった場合
+	if err == nil && data.TaskId != 0 {
+		// データが見つかった場合の処理
+		return true, nil
+	}
+
+	// データが見つからなかった場合の処理
+	return false, nil
+}

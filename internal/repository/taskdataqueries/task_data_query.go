@@ -10,6 +10,7 @@ type ITaskDataQuery interface {
 	CreateDataQuery(CreateTaskDataParam) (error, error)
 	UpdateDataQuery(UpdateTaskDataParam) (error, error)
 	CheckSameTasksDataQuery(CreateTaskDataParam) (bool, error)
+	CheckTaskExistDataQuery(UpdateTaskDataParam) (bool, error)
 }
 
 type TaskDataQuery struct {

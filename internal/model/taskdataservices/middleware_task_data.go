@@ -9,6 +9,8 @@ import (
 type ITaskDataMiddlewareService interface {
 	// Exec(param GetTaskDataParam) (interface{}, error)
 	CheckSameTasks(param CreateTaskDataParam) (bool, error)
+	CheckTaskId(param DeleteTaskDataParam) (bool, error)
+	ChangeParamPutToDel(param UpdateTaskDataParam) (DeleteTaskDataParam)
 }
 
 type MiddlewareTaskDataService struct {
@@ -43,4 +45,30 @@ func (s MiddlewareTaskDataService) CheckSameTasks(param CreateTaskDataParam) (bo
 	}
 
 	return res, nil
+}
+
+func (s MiddlewareTaskDataService) CheckTaskId(param DeleteTaskDataParam) (bool, error) {
+	p, err := taskdataqueries.NewDeleteTaskDataParam(
+		param.TaskId,
+	)
+
+	if err != nil {
+		return false, err
+	}
+
+	res, err := s.query.CheckTaskExistDataQuery(*p)
+
+	if err != nil {
+		return false, err
+	}
+
+	return res, nil
+}
+
+func (s MiddlewareTaskDataService) ChangeParamPutToDel(param UpdateTaskDataParam) (DeleteTaskDataParam) {
+	p := &DeleteTaskDataParam{
+		TaskId: param.TaskId,
+	}
+
+	return *p
 }

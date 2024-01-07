@@ -9,7 +9,9 @@ type ITaskDataQuery interface {
 	GetDataQuery(GetTaskDataParam) ([]TaskDataResponse, error)
 	CreateDataQuery(CreateTaskDataParam) (error, error)
 	UpdateDataQuery(UpdateTaskDataParam) (error, error)
+	DeleteDataQuery(DeleteTaskDataParam) (error, error)
 	CheckSameTasksDataQuery(CreateTaskDataParam) (bool, error)
+	CheckTaskExistDataQuery(DeleteTaskDataParam) (bool, error)
 }
 
 type TaskDataQuery struct {
@@ -35,6 +37,15 @@ func NewCreateTaskDataQuery(dbContext *database.DbContext) ITaskDataQuery {
 }
 
 func NewUpdateTaskDataQuery(dbContext *database.DbContext) ITaskDataQuery {
+	base := repository.NewBaseQueryServices(dbContext)
+	q := &TaskDataQuery{
+		base: base,
+	}
+
+	return *q
+}
+
+func NewDeleteTaskDataQuery(dbContext *database.DbContext) ITaskDataQuery {
 	base := repository.NewBaseQueryServices(dbContext)
 	q := &TaskDataQuery{
 		base: base,

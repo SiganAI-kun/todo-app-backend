@@ -9,7 +9,8 @@ import (
 type ITaskDataMiddlewareService interface {
 	// Exec(param GetTaskDataParam) (interface{}, error)
 	CheckSameTasks(param CreateTaskDataParam) (bool, error)
-	CheckTaskId(param UpdateTaskDataParam) (bool, error)
+	CheckTaskId(param DeleteTaskDataParam) (bool, error)
+	ChangeParamPutToDel(param UpdateTaskDataParam) (DeleteTaskDataParam)
 }
 
 type MiddlewareTaskDataService struct {
@@ -46,12 +47,9 @@ func (s MiddlewareTaskDataService) CheckSameTasks(param CreateTaskDataParam) (bo
 	return res, nil
 }
 
-func (s MiddlewareTaskDataService) CheckTaskId(param UpdateTaskDataParam) (bool, error) {
-	p, err := taskdataqueries.NewUpdateTaskDataParam(
+func (s MiddlewareTaskDataService) CheckTaskId(param DeleteTaskDataParam) (bool, error) {
+	p, err := taskdataqueries.NewDeleteTaskDataParam(
 		param.TaskId,
-		param.TaskName,
-		param.TaskDeadline,
-		param.TaskDetails,
 	)
 
 	if err != nil {
@@ -65,4 +63,12 @@ func (s MiddlewareTaskDataService) CheckTaskId(param UpdateTaskDataParam) (bool,
 	}
 
 	return res, nil
+}
+
+func (s MiddlewareTaskDataService) ChangeParamPutToDel(param UpdateTaskDataParam) (DeleteTaskDataParam) {
+	p := &DeleteTaskDataParam{
+		TaskId: param.TaskId,
+	}
+
+	return *p
 }

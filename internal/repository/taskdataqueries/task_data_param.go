@@ -19,6 +19,10 @@ type UpdateTaskDataParam struct {
 	TaskDetails  string
 }
 
+type DeleteTaskDataParam struct {
+	TaskId int
+}
+
 func NewGetTaskDataParam(
 	start string,
 	end string,
@@ -58,6 +62,16 @@ func NewUpdateTaskDataParam(
 		TaskName:     taskName,
 		TaskDeadline: taskDeadline,
 		TaskDetails:  taskDetails,
+	}
+
+	return p, nil
+}
+
+func NewDeleteTaskDataParam(
+	taskId int,
+) (*DeleteTaskDataParam, error) {
+	p := &DeleteTaskDataParam{
+		TaskId: taskId,
 	}
 
 	return p, nil
